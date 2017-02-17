@@ -139,10 +139,11 @@
 
   - name: Ensure the Rocket.Chat log file symlink is present [Ubuntu 14]
     file:
-      path: /var/log/rocketchat.log
-      src: /var/log/upstart/rocketchat.log
+      path: "/var/log/rocketchat{{ item }}.log"
+      src: "/var/log/upstart/rocketchat{{ item }}.log"
       state: link
       force: yes
+    with_items: "{{ rocket_chat_service_ports }}"
 
     when:
       - ansible_distribution == "Ubuntu"
@@ -173,6 +174,9 @@
       - Update the Rocket.Chat service configuration
       - Restart the Rocket.Chat service
     tags: service
+    with_items: "{{ rocket_chat_service_ports }}"
+    loop_control:
+      loop_var: rocket_chat_service_port
 
   - meta: flush_handlers
 
@@ -189,16 +193,18 @@
 
   - name: Restart the Rocket.Chat service [UPGRADE]
     service:
-      name: rocketchat
+      name: rocketchat{{ item }}
       state: restarted
     when: rocket_chat_upgraded|bool
+    with_items: "{{ rocket_chat_service_ports }}"
 
   - name: Ensure the Rocket.Chat service is running/enabled
     service:
-      name: rocketchat
+      name: rocketchat{{ item }}
       state: started
       enabled: true
     tags: service
+    with_items: "{{ rocket_chat_service_ports }}"
 
   - include: nginx.yml
     when: rocket_chat_include_nginx|bool

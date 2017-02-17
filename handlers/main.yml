@@ -17,4 +17,5 @@
     when: rocket_chat_service_update_command is defined
 
   - name: Restart the Rocket.Chat service
-    service: name=rocketchat state=restarted
+    service: "name=rocketchat{{ item }} state=restarted"
+    with_items: "{{ rocket_chat_service_ports }}"

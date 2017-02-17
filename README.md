@@ -59,7 +59,7 @@ All variables have sane defaults set in [`defaults/main.yml`](defaults/main.yml)
 | `rocket_chat_service_user` | `rocketchat` | The name of the user that will run the Rocket.Chat server process |
 | `rocket_chat_service_group` | `rocketchat` | The name of the primary group for the `rocket_chat_service_user` user |
 | `rocket_chat_service_host` | `"{{ ansible_fqdn }}"` | The FQDN of the Rocket.Chat system |
-| `rocket_chat_service_port` | 3000 | The TCP port Rocket.Chat listens on |
+| `rocket_chat_service_ports` | [3000] | A list of TCP ports Rocket.Chat listens on |
 | `rocket_chat_node_version` | `4.5.0` | The version of NodeJS to install that `n` understands |
 | `rocket_chat_node_path` | `/usr/local/n/versions/node/{{ rocket_chat_node_version }}/bin` | The path to the `node` binary directory that n installs |
 | `rocket_chat_node_orig_npm` | `/usr/bin/npm` | The path to the original `npm` binary, before n installs any Node versions |
@@ -227,6 +227,17 @@ A playbook to deploy Rocket.Chat to `chat_servers` but exclude the deployment of
       rocket_chat_automatic_upgrades: true
       rocket_chat_include_mongodb: false
       rocket_chat_mongodb_server: 10.19.3.24
+
+    roles:
+      - RocketChat.Server
+```
+
+A simple playbook to deploy multiple instances of Rocket.Chat to `chat_servers`.:
+``` yaml
+  - hosts: chat_servers
+
+    vars:
+      rocket_chat_service_ports: [3000, 3001, 3002, 3003]
 
     roles:
       - RocketChat.Server
