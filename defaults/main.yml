@@ -13,7 +13,7 @@ rocket_chat_tarball_validate_remote_cert: true
 rocket_chat_service_user: rocketchat
 rocket_chat_service_group: rocketchat
 rocket_chat_service_host: "{{ ansible_fqdn }}"
-rocket_chat_service_port: 3000
+rocket_chat_service_ports: [3000]
 rocket_chat_node_version: 4.5.0
 rocket_chat_node_path: /usr/local/n/versions/node/{{ rocket_chat_node_version }}/bin
 rocket_chat_node_orig_npm: /usr/bin/npm

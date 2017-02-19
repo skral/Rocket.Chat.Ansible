@@ -21,5 +21,6 @@
 
   - name: Restart the Rocket.Chat service
     service:
-      name: rocketchat
+      name: "rocketchat{{ item }}"
       state: restarted
+    with_items: "{{ rocket_chat_service_ports }}"
